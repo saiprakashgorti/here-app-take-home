@@ -3,7 +3,7 @@ Proposal for Attendance Management System
 
 This document outlines the architecture, design patterns, and features implemented in the **Attendance Management System**. The system is designed to efficiently manage student attendance records, following best practices and incorporating several advanced features.
 
-Here is a working video of the app - [insert drive link]
+Here is a working video of the app - [[DEMO]](https://drive.google.com/file/d/1K_OMt7K4biT39zbyA56UWnC9hxyktS-K/view?usp=sharing)
 
 1\. **Frontend Overview**
 -------------------------
