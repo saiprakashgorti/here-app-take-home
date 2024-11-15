@@ -4,14 +4,15 @@ import axios from '../api/axios';
 import '../App.css';
 
 const AttendanceModal = ({ open, handleClose, type, uin, refreshData }) => {
-    const netId='student001';
-    const classId='CS411';
+    const netId = 'student001';
+    const classId = 'CS411';
     const [setUIN] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [takenBy, setTakenBy] = useState('');
     const [waivedBy, setWaivedBy] = useState('');
     const [reasonForWaiving, setReasonForWaiving] = useState('');
+    const [deleteConfirmation, setDeleteConfirmation] = useState('');
 
     const handleSubmit = async () => {
         try {
@@ -20,7 +21,7 @@ const AttendanceModal = ({ open, handleClose, type, uin, refreshData }) => {
             } else if (type === 'remove') {
                 await axios.delete('/delete-attendance-records', { data: { uin, classId, startDate, endDate } });
             } else if (type === 'waive') {
-                await axios.patch('/waive-attendance', { uin, netId, classId, startDate, endDate, reasonForWaiving, waivedBy});
+                await axios.patch('/waive-attendance', { uin, netId, classId, startDate, endDate, reasonForWaiving, waivedBy });
             }
 
             refreshData();
@@ -86,7 +87,7 @@ const AttendanceModal = ({ open, handleClose, type, uin, refreshData }) => {
                         margin="normal"
                     />
                 )}
-                {type === 'waive' && ( 
+                {type === 'waive' && (
                     <TextField
                         label="Reason for Waiving"
                         fullWidth
@@ -96,12 +97,32 @@ const AttendanceModal = ({ open, handleClose, type, uin, refreshData }) => {
                     />
                 )}
 
-                <Button variant="contained" color={type === 'add' ? "primary" : type === "remove" ? "error" : "warning"} onClick={handleSubmit}>
-                    {type === 'add' ? "Add Attendance" : type === "remove" ? "Remove Attendance" : "Waive Attendance"}
+                {type === 'remove' && (
+                    <TextField
+                        label="Type 'Delete' to Confirm"
+                        fullWidth
+                        value={deleteConfirmation}
+                        onChange={(e) => setDeleteConfirmation(e.target.value)}
+                        margin="normal"
+                        helperText="This action cannot be undone."
+                    />
+                )}
+
+                <Button
+                    variant="contained"
+                    color={type === 'add' ? "primary" : type === "remove" ? "error" : "warning"}
+                    onClick={handleSubmit}
+                    disabled={type === "remove" && deleteConfirmation !== "Delete"} // Disable if not confirmed
+                >
+                    {type === 'add'
+                        ? "Add Attendance"
+                        : type === "remove"
+                            ? "Remove Attendance"
+                            : "Waive Attendance"}
                 </Button>
-                <Button style={{margin: 12}} variant="outlined" color={"error"} onClick={handleClose}>Cancel</Button>
+                <Button style={{ margin: 12 }} variant="outlined" color={"error"} onClick={handleClose}>Cancel</Button>
             </Box>
-        </Modal>
+        </Modal >
     );
 };
 
